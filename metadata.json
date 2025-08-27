@@ -1,0 +1,5 @@
+{
+  "name": "Mythos DB: Base de Datos Mitológica",
+  "description": "Una base de datos interactiva de personajes mitológicos y reales de obras épicas como la Ilíada y la Odisea. Explora personajes, sus relaciones familiares y filtra por obra o alfabéticamente.",
+  "requestFramePermissions": []
+}
