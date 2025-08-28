@@ -1,8 +1,9 @@
-
 export enum Work {
   Iliad = "La Ilíada",
   Odyssey = "La Odisea",
   Theogony = "Teogonía",
+  Metamorphoses = "Metamorfosis",
+  GreekTragedies = "Tragedias Griegas",
   GreekMythology = "Mitología Griega General"
 }
 
@@ -14,6 +15,8 @@ export enum CharacterType {
   Mortal = "Mortal",
   Semidios = "Semidiós",
   Ninfa = "Ninfa",
+  Satiro = "Sátiro",
+  Gigante = "Gigante",
   Monstruo = "Monstruo"
 }
 
