@@ -947,15 +947,18 @@ export const characters: Character[] = [
     type: CharacterType.DeidadMenor,
     family: {},
   },
-  ...Array.from({ length: 220 }, (_, i) => i + 81).map(id => ({
-    id,
-    name: `Personaje Egipcio ${id}`,
-    epithet: `Epiteto Descriptivo ${id}`,
-    description: `Este es un personaje adicional para expandir la base de datos del Antiguo Egipto. La historia y las relaciones de este personaje ${id} son parte del rico tapiz de la civilización del Nilo.`,
-    imageUrl: `https://picsum.photos/400/600?grayscale&random=${id}`,
-    // FIX: The 'eras' property expects an array of 'Era', but was being assigned a single 'Era'. Wrapped the value in an array.
-    eras: [[Era.MitologiaGeneral, Era.ReinoAntiguo, Era.ReinoMedio, Era.ReinoNuevo, Era.PeriodoTardio, Era.PeriodoPtolemaico][id % 6]],
-    type: [CharacterType.Dios, CharacterType.Faraon, CharacterType.Reina, CharacterType.Mortal, CharacterType.DeidadMenor, CharacterType.Visir, CharacterType.Monstruo][id % 7],
-    family: {},
-  })),
+  ...Array.from({ length: 220 }, (_, i) => i + 81).map(id => {
+    const allEras = Object.values(Era);
+    const allTypes = Object.values(CharacterType);
+    return {
+      id,
+      name: `Personaje Egipcio ${id}`,
+      epithet: `Epiteto Descriptivo ${id}`,
+      description: `Este es un personaje adicional para expandir la base de datos del Antiguo Egipto. La historia y las relaciones de este personaje ${id} son parte del rico tapiz de la civilización del Nilo.`,
+      imageUrl: `https://picsum.photos/400/600?grayscale&random=${id}`,
+      eras: [allEras[id % allEras.length]],
+      type: allTypes[id % allTypes.length],
+      family: {},
+    }
+  }),
 ];
