@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [selectedEra, setSelectedEra] = useState<Era | 'all'>('all');
   const [selectedType, setSelectedType] = useState<CharacterType | 'all'>('all');
   const [alphaFilter, setAlphaFilter] = useState<string>('all');
+  const [dataSource, setDataSource] = useState<'all' | 'main' | 'generated'>('all');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -32,8 +33,13 @@ const App: React.FC = () => {
       .filter(char => 
         alphaFilter === 'all' || char.name.toUpperCase().startsWith(alphaFilter)
       )
+      .filter(char => {
+        if (dataSource === 'main') return char.id <= 80;
+        if (dataSource === 'generated') return char.id > 80;
+        return true;
+      })
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [searchTerm, selectedEra, selectedType, alphaFilter, characterList]);
+  }, [searchTerm, selectedEra, selectedType, alphaFilter, dataSource, characterList]);
 
   const handleSelectCharacter = (character: Character) => {
     setSelectedCharacter(character);
@@ -112,6 +118,8 @@ const App: React.FC = () => {
             setSelectedType={setSelectedType}
             alphaFilter={alphaFilter}
             setAlphaFilter={setAlphaFilter}
+            dataSource={dataSource}
+            setDataSource={setDataSource}
           />
           
           <div className="text-center mb-6">

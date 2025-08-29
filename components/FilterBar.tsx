@@ -10,6 +10,8 @@ interface FilterBarProps {
   setSelectedType: (type: CharacterType | 'all') => void;
   alphaFilter: string;
   setAlphaFilter: (char: string) => void;
+  dataSource: 'all' | 'main' | 'generated';
+  setDataSource: (source: 'all' | 'main' | 'generated') => void;
 }
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -23,6 +25,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   setSelectedType,
   alphaFilter,
   setAlphaFilter,
+  dataSource,
+  setDataSource,
 }) => {
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
@@ -37,7 +41,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
   return (
     <div className="p-4 md:p-6 bg-[#f4e8d3]/70 backdrop-blur-sm rounded-lg shadow-lg mb-8 space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
         {/* Search Input */}
         <div>
           <form onSubmit={handleSearchSubmit}>
@@ -96,6 +100,22 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 {type}
               </option>
             ))}
+          </select>
+        </div>
+        {/* Data Source Filter */}
+        <div>
+          <label htmlFor="dataSource" className="block text-sm font-medium text-[#e8b923] mb-2">
+            Fuente de Datos
+          </label>
+          <select
+            id="dataSource"
+            value={dataSource}
+            onChange={(e) => setDataSource(e.target.value as 'all' | 'main' | 'generated')}
+            className="w-full bg-[#fdf6e3] border border-[#c8b08a] rounded-md py-2 px-3 text-[#1a3a4a] focus:ring-2 focus:ring-[#e8b923] focus:border-[#e8b923] transition"
+          >
+            <option value="all">Todos los Personajes</option>
+            <option value="main">Personajes Principales</option>
+            <option value="generated">Personajes Adicionales</option>
           </select>
         </div>
       </div>
