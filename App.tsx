@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { characters as initialCharacters } from './data/characters';
 import type { Character, Era, CharacterType } from './types';
+import { CharacterType as CharacterTypeEnum } from './types';
 import { CharacterCard } from './components/CharacterCard';
 import { CharacterModal } from './components/CharacterModal';
 import { FilterBar } from './components/FilterBar';
@@ -77,15 +78,113 @@ const App: React.FC = () => {
   };
 
   const handleSaveCharacter = (characterData: Omit<Character, 'id'> & { id?: number }) => {
-    if (characterData.id) { // Editing existing character
-      setCharacterList(characterList.map(c => c.id === characterData.id ? { ...c, ...characterData } as Character : c));
-    } else { // Adding new character
-      const newId = characterList.length > 0 ? Math.max(...characterList.map(c => c.id)) + 1 : 1;
-      const newCharacter: Character = { ...characterData, id: newId };
-      setCharacterList([...characterList, newCharacter]);
+    const isEditing = characterData.id !== undefined;
+    const savedCharacterId = isEditing ? characterData.id : (characterList.length > 0 ? Math.max(...characterList.map(c => c.id)) + 1 : 1);
+    
+    const originalCharacter = isEditing ? characterList.find(c => c.id === savedCharacterId) : null;
+    
+    const newSavedCharacter: Character = {
+      ...(originalCharacter || { eras: [], type: CharacterTypeEnum.Mortal, description: '', epithet: '', name: '', imageUrl: '' }), // Provide defaults for new char
+      ...characterData,
+      id: savedCharacterId,
+      family: {
+        fatherId: characterData.family?.fatherId,
+        motherId: characterData.family?.motherId,
+        spousesIds: characterData.family?.spousesIds || [],
+        childrenIds: characterData.family?.childrenIds || [],
+      },
+    };
+
+    const oldFamily = originalCharacter?.family || {};
+    const newFamily = newSavedCharacter.family;
+
+    // --- Calculate relationship changes ---
+    const oldFather = oldFamily.fatherId;
+    const newFather = newFamily.fatherId;
+    const oldMother = oldFamily.motherId;
+    const newMother = newFamily.motherId;
+    
+    const oldSpouses = oldFamily.spousesIds || [];
+    const newSpouses = newFamily.spousesIds || [];
+    const removedSpouses = oldSpouses.filter(id => !newSpouses.includes(id));
+    const addedSpouses = newSpouses.filter(id => !oldSpouses.includes(id));
+
+    const oldChildren = oldFamily.childrenIds || [];
+    const removedChildren = oldChildren.filter(id => !(newFamily.childrenIds || []).includes(id));
+
+    // --- Create a new list with all relationship updates ---
+    let listWithUpdates = characterList.map(char => {
+        let newChar = { ...char };
+        let familyChanged = false;
+        let newFamilyRelations = { ...newChar.family };
+
+        // 1. Update character's children list based on parent changes of the saved character
+        if (newChar.id === oldFather && oldFather !== newFather) {
+            newFamilyRelations.childrenIds = (newFamilyRelations.childrenIds || []).filter(id => id !== savedCharacterId);
+            familyChanged = true;
+        }
+        if (newChar.id === newFather && newFather !== oldFather) {
+            const children = newFamilyRelations.childrenIds || [];
+            if (!children.includes(savedCharacterId)) {
+              newFamilyRelations.childrenIds = [...children, savedCharacterId];
+              familyChanged = true;
+            }
+        }
+        if (newChar.id === oldMother && oldMother !== newMother) {
+            newFamilyRelations.childrenIds = (newFamilyRelations.childrenIds || []).filter(id => id !== savedCharacterId);
+            familyChanged = true;
+        }
+        if (newChar.id === newMother && newMother !== oldMother) {
+            const children = newFamilyRelations.childrenIds || [];
+            if (!children.includes(savedCharacterId)) {
+                newFamilyRelations.childrenIds = [...children, savedCharacterId];
+                familyChanged = true;
+            }
+        }
+
+        // 2. Update this character's spouse list
+        if (removedSpouses.includes(newChar.id)) {
+            newFamilyRelations.spousesIds = (newFamilyRelations.spousesIds || []).filter(id => id !== savedCharacterId);
+            familyChanged = true;
+        }
+        if (addedSpouses.includes(newChar.id)) {
+            const spouses = newFamilyRelations.spousesIds || [];
+            if (!spouses.includes(savedCharacterId)) {
+                newFamilyRelations.spousesIds = [...spouses, savedCharacterId];
+                familyChanged = true;
+            }
+        }
+
+        // 3. Update this character's parent if they were a removed child
+        if (removedChildren.includes(newChar.id)) {
+            if (newFamilyRelations.fatherId === savedCharacterId) {
+                newFamilyRelations.fatherId = undefined;
+                familyChanged = true;
+            }
+            if (newFamilyRelations.motherId === savedCharacterId) {
+                newFamilyRelations.motherId = undefined;
+                familyChanged = true;
+            }
+        }
+        
+        if (familyChanged) {
+          return { ...newChar, family: newFamilyRelations };
+        }
+        return newChar;
+    });
+
+    if (isEditing) {
+      // If editing, update the character itself in the list
+      listWithUpdates = listWithUpdates.map(c => c.id === savedCharacterId ? newSavedCharacter : c);
+    } else {
+      // If adding, push the new character
+      listWithUpdates.push(newSavedCharacter);
     }
+    
+    setCharacterList(listWithUpdates);
     handleCloseForm();
   };
+
 
   return (
     <div className="min-h-screen font-sans p-4 sm:p-6 lg:p-8">
