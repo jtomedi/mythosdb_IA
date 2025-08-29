@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Character } from '../types';
-import { Work, CharacterType } from '../types';
+import { Era, CharacterType } from '../types';
 
 interface CharacterFormModalProps {
   isOpen: boolean;
@@ -12,11 +12,10 @@ interface CharacterFormModalProps {
 
 const initialFormState: Omit<Character, 'id'> = {
   name: '',
-  greekName: '',
-  romanName: '',
+  epithet: '',
   description: '',
   imageUrl: '',
-  works: [],
+  eras: [],
   type: CharacterType.Mortal,
   family: {
     fatherId: undefined,
@@ -34,7 +33,6 @@ export const CharacterFormModal: React.FC<CharacterFormModalProps> = ({ isOpen, 
       setFormData({
         ...initialFormState,
         ...characterToEdit,
-        romanName: characterToEdit.romanName || '',
         family: {
             fatherId: characterToEdit.family.fatherId,
             motherId: characterToEdit.family.motherId,
@@ -72,13 +70,13 @@ export const CharacterFormModal: React.FC<CharacterFormModalProps> = ({ isOpen, 
     setFormData(prev => ({...prev, family: { ...prev.family, [key]: value }}));
   };
 
-  const handleWorkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEraChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-    const workValue = value as Work;
+    const eraValue = value as Era;
     if (checked) {
-      setFormData(prev => ({ ...prev, works: [...prev.works, workValue] }));
+      setFormData(prev => ({ ...prev, eras: [...prev.eras, eraValue] }));
     } else {
-      setFormData(prev => ({ ...prev, works: prev.works.filter(w => w !== workValue) }));
+      setFormData(prev => ({ ...prev, eras: prev.eras.filter(w => w !== eraValue) }));
     }
   };
 
@@ -93,26 +91,25 @@ export const CharacterFormModal: React.FC<CharacterFormModalProps> = ({ isOpen, 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50" onClick={onClose}>
       <div 
-        className="bg-[#3e322b] rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto scrollbar-thin relative"
+        className="bg-[#f4e8d3] rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto scrollbar-thin relative"
         onClick={(e) => e.stopPropagation()}
       >
         <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6">
-          <h2 className="text-3xl font-serif font-bold text-center text-[#d4af37] mb-4">
+          <h2 className="text-3xl font-serif font-bold text-center text-[#e8b923] mb-4">
             {characterToEdit ? 'Editar Personaje' : 'Añadir Nuevo Personaje'}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Basic Info */}
             <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Nombre" required className="input-style" />
-            <input type="text" name="greekName" value={formData.greekName} onChange={handleChange} placeholder="Nombre Griego" required className="input-style" />
-            <input type="text" name="romanName" value={formData.romanName} onChange={handleChange} placeholder="Nombre Romano (Opcional)" className="input-style" />
-            <input type="text" name="imageUrl" value={formData.imageUrl} onChange={handleChange} placeholder="URL de la Imagen" required className="input-style" />
+            <input type="text" name="epithet" value={formData.epithet} onChange={handleChange} placeholder="Epíteto" required className="input-style" />
+            <input type="text" name="imageUrl" value={formData.imageUrl} onChange={handleChange} placeholder="URL de la Imagen" required className="input-style col-span-1 md:col-span-2" />
           </div>
 
           <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Descripción" required className="input-style w-full min-h-[100px]"></textarea>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Type & Works */}
+            {/* Type & Eras */}
             <div>
                 <label className="label-style">Tipo de Personaje</label>
                 <select name="type" value={formData.type} onChange={handleChange} className="input-style w-full">
@@ -120,12 +117,12 @@ export const CharacterFormModal: React.FC<CharacterFormModalProps> = ({ isOpen, 
                 </select>
             </div>
             <div>
-                <label className="label-style">Aparece en</label>
-                <div className="bg-[#2a211c] border border-[#6e5a4b] p-3 rounded-md space-y-2">
-                    {Object.values(Work).map(work => (
-                        <label key={work} className="flex items-center space-x-2 text-[#f5f1e8]">
-                            <input type="checkbox" value={work} checked={formData.works.includes(work)} onChange={handleWorkChange} className="form-checkbox bg-[#4b3f35] border-[#6e5a4b] text-[#d4af37] focus:ring-[#d4af37]"/>
-                            <span>{work}</span>
+                <label className="label-style">Periodos</label>
+                <div className="bg-[#fdf6e3] border border-[#c8b08a] p-3 rounded-md space-y-2">
+                    {Object.values(Era).map(era => (
+                        <label key={era} className="flex items-center space-x-2 text-[#1a3a4a]">
+                            <input type="checkbox" value={era} checked={formData.eras.includes(era)} onChange={handleEraChange} className="form-checkbox bg-[#d1c7b8] border-[#c8b08a] text-[#e8b923] focus:ring-[#e8b923]"/>
+                            <span>{era}</span>
                         </label>
                     ))}
                 </div>
@@ -134,7 +131,7 @@ export const CharacterFormModal: React.FC<CharacterFormModalProps> = ({ isOpen, 
 
           {/* Family Relations */}
           <div className="space-y-4">
-            <h3 className="text-xl font-serif text-center text-[#d4af37]">Relaciones Familiares</h3>
+            <h3 className="text-xl font-serif text-center text-[#e8b923]">Relaciones Familiares</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <select name="family.fatherId" value={formData.family.fatherId || ''} onChange={handleChange} className="input-style w-full">
                     <option value="">Seleccionar Padre</option>
@@ -167,47 +164,47 @@ export const CharacterFormModal: React.FC<CharacterFormModalProps> = ({ isOpen, 
       </div>
       <style>{`
         .input-style {
-          background-color: #2a211c;
-          border: 1px solid #6e5a4b;
+          background-color: #fdf6e3;
+          border: 1px solid #c8b08a;
           border-radius: 0.375rem;
           padding: 0.5rem 0.75rem;
-          color: #f5f1e8;
+          color: #1a3a4a;
           transition: all 0.2s;
         }
         .input-style:focus {
           ring: 2px;
-          ring-color: #d4af37;
-          border-color: #d4af37;
+          ring-color: #e8b923;
+          border-color: #e8b923;
           outline: none;
         }
         .label-style {
           display: block;
           font-size: 0.875rem;
           font-weight: 500;
-          color: #d4af37;
+          color: #e8b923;
           margin-bottom: 0.5rem;
         }
         .btn-primary {
-          background-color: #d4af37;
-          color: #2a211c;
+          background-color: #e8b923;
+          color: #1a3a4a;
           font-weight: bold;
           padding: 0.5rem 1.5rem;
           border-radius: 0.375rem;
           transition: background-color 0.2s;
         }
         .btn-primary:hover {
-          background-color: #e6c35c;
+          background-color: #ffd149;
         }
         .btn-secondary {
-          background-color: #4b3f35;
-          color: #f5f1e8;
+          background-color: #d1c7b8;
+          color: #1a3a4a;
           font-weight: 500;
           padding: 0.5rem 1.5rem;
           border-radius: 0.375rem;
           transition: background-color 0.2s;
         }
         .btn-secondary:hover {
-          background-color: #6e5a4b;
+          background-color: #c8b08a;
         }
       `}</style>
     </div>

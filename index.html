@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mythos DB: Base de Datos Mitológica</title>
+    <title>Kemet DB: Base de Datos del Antiguo Egipto</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,29 +22,31 @@
     </script>
     <style>
       body {
-        background-color: #f5f1e8;
-        color: #3e322b;
-        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d1c7b8' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        background-color: #fdf6e3; /* Arena Pálido */
+        color: #1a3a4a; /* Azul Nilo Oscuro */
+        background-image: linear-gradient(rgba(253, 246, 227, 0.88), rgba(253, 246, 227, 0.88)), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTIwIiBzdHJva2U9IiM1YTRkM2EiIHN0cm9rZS13aWR0aD0iMC41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik01MCAxMTAgQyA2MCA5MCwgMTAwIDg1LCAxNTAgOTAgTCAxNjAgMTEwIFoiIC8+PHBhdGggZD0iTTE1MCA5MCBDIDE0NSA3MCwgMTU1IDUwLCAxNjUgNTggQyAxNzUgNTAsIDE4MCA3MCwgMTc1IDkwIiAvPjxwYXRoIGQ9Ik0xNjAgNTIgTCAxODAgNTIgTCAxODIgNjUgTCAxNTggNjUgWiIgLz48bGluZSB4MT0iMTY1IiB5MT0iNTAiIHgyPSIxNjUiIHkyPSI0MCIgLz48bGluZSB4MT0iMTYwIiB5MT0iNDIiIHgyPSIxNzAiIHkyPSI0MiIgLz48cGF0aCBkPSJNNzAgMTEwIEMgNjUgMTE1LCA2MCAxMTUsIDU1IDExMCIgLz48cGF0aCBkPSJNMTYwIDExMCBMIDE5MCAxMTAgQyAxOTUgMTEwLCAxOTUgMTA1LCAxOTAgMTA1IiAvPjxwYXRoIGQ9Ik0xNTggMTEwIEwgMTg4IDExMCBDIDE5MyAxMTAsIDE5MyAxMDUsIDE4OCAxMDUiIC8+PC9zdmc+");
+        background-size: cover;
+        background-position: center center;
         background-attachment: fixed;
       }
       .scrollbar-thin {
         scrollbar-width: thin;
-        scrollbar-color: #bcaea1 #e9e4d9;
+        scrollbar-color: #c8b08a #f4e8d3;
       }
       .scrollbar-thin::-webkit-scrollbar {
         width: 8px;
       }
       .scrollbar-thin::-webkit-scrollbar-track {
-        background: #e9e4d9;
+        background: #f4e8d3;
       }
       .scrollbar-thin::-webkit-scrollbar-thumb {
-        background-color: #bcaea1;
+        background-color: #c8b08a;
         border-radius: 4px;
-        border: 2px solid #e9e4d9;
+        border: 2px solid #f4e8d3;
       }
       ::selection {
-        background-color: #d4af37;
-        color: #2a211c;
+        background-color: #e8b923; /* Dorado Desértico */
+        color: #1a3a4a;
       }
     </style>
   <script type="importmap">

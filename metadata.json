@@ -1,5 +1,5 @@
 {
-  "name": "Mythos DB: Base de Datos Mitológica",
-  "description": "Una base de datos interactiva de personajes mitológicos y reales de obras épicas como la Ilíada y la Odisea. Explora personajes, sus relaciones familiares y filtra por obra o alfabéticamente.",
+  "name": "Kemet DB: Base de Datos del Antiguo Egipto",
+  "description": "Una base de datos interactiva de dioses, faraones y personajes del Antiguo Egipto. Explora figuras, sus relaciones familiares y filtra por era o alfabéticamente.",
   "requestFramePermissions": []
 }

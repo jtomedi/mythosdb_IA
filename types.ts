@@ -1,33 +1,32 @@
-export enum Work {
-  Iliad = "La Ilíada",
-  Odyssey = "La Odisea",
-  Theogony = "Teogonía",
-  Metamorphoses = "Metamorfosis",
-  GreekTragedies = "Tragedias Griegas",
-  GreekMythology = "Mitología Griega General"
+export enum Era {
+  Predinastico = "Periodo Predinástico",
+  ReinoAntiguo = "Reino Antiguo",
+  ReinoMedio = "Reino Medio",
+  ReinoNuevo = "Reino Nuevo",
+  PeriodoTardio = "Periodo Tardío",
+  PeriodoPtolemaico = "Periodo Ptolemaico",
+  MitologiaGeneral = "Mitología General"
 }
 
 export enum CharacterType {
   Dios = "Dios",
-  Titan = "Titán",
+  Faraon = "Faraón",
   Primordial = "Primordial",
-  Heroe = "Héroe",
   Mortal = "Mortal",
-  Semidios = "Semidiós",
-  Ninfa = "Ninfa",
-  Satiro = "Sátiro",
-  Gigante = "Gigante",
-  Monstruo = "Monstruo"
+  DeidadMenor = "Deidad Menor",
+  Reina = "Reina",
+  Visir = "Visir",
+  Monstruo = "Monstruo",
+  Concepto = "Concepto"
 }
 
 export interface Character {
   id: number;
   name: string;
-  greekName: string;
-  romanName?: string;
+  epithet: string; // Ej: "El Oculto" para Amón
   description: string;
   imageUrl: string;
-  works: Work[];
+  eras: Era[];
   type: CharacterType;
   family: {
     fatherId?: number;

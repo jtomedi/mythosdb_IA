@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { characters as initialCharacters } from './data/characters';
-import type { Character, Work, CharacterType } from './types';
+import type { Character, Era, CharacterType } from './types';
 import { CharacterCard } from './components/CharacterCard';
 import { CharacterModal } from './components/CharacterModal';
 import { FilterBar } from './components/FilterBar';
@@ -9,7 +9,7 @@ import { CharacterFormModal } from './components/CharacterFormModal';
 const App: React.FC = () => {
   const [characterList, setCharacterList] = useState<Character[]>(initialCharacters);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedWork, setSelectedWork] = useState<Work | 'all'>('all');
+  const [selectedEra, setSelectedEra] = useState<Era | 'all'>('all');
   const [selectedType, setSelectedType] = useState<CharacterType | 'all'>('all');
   const [alphaFilter, setAlphaFilter] = useState<string>('all');
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
@@ -21,11 +21,10 @@ const App: React.FC = () => {
     return characterList
       .filter(char => 
         char.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        char.greekName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (char.romanName && char.romanName.toLowerCase().includes(searchTerm.toLowerCase()))
+        char.epithet.toLowerCase().includes(searchTerm.toLowerCase())
       )
       .filter(char => 
-        selectedWork === 'all' || char.works.includes(selectedWork)
+        selectedEra === 'all' || char.eras.includes(selectedEra)
       )
       .filter(char => 
         selectedType === 'all' || char.type === selectedType
@@ -34,7 +33,7 @@ const App: React.FC = () => {
         alphaFilter === 'all' || char.name.toUpperCase().startsWith(alphaFilter)
       )
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [searchTerm, selectedWork, selectedType, alphaFilter, characterList]);
+  }, [searchTerm, selectedEra, selectedType, alphaFilter, characterList]);
 
   const handleSelectCharacter = (character: Character) => {
     setSelectedCharacter(character);
@@ -75,7 +74,7 @@ const App: React.FC = () => {
     if (characterData.id) { // Editing existing character
       setCharacterList(characterList.map(c => c.id === characterData.id ? { ...c, ...characterData } as Character : c));
     } else { // Adding new character
-      const newId = Math.max(...characterList.map(c => c.id)) + 1;
+      const newId = characterList.length > 0 ? Math.max(...characterList.map(c => c.id)) + 1 : 1;
       const newCharacter: Character = { ...characterData, id: newId };
       setCharacterList([...characterList, newCharacter]);
     }
@@ -86,11 +85,11 @@ const App: React.FC = () => {
     <div className="min-h-screen font-sans p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         <header className="text-center mb-8">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-extrabold text-[#d4af37] tracking-wider">
-            Mythos DB
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-extrabold text-[#e8b923] tracking-wider">
+            Kemet DB
           </h1>
-          <p className="text-[#6e5a4b] mt-2 text-lg">
-            Una base de datos de héroes, dioses y mortales de la mitología.
+          <p className="text-[#3c6e71] mt-2 text-lg">
+            Una base de datos de dioses, faraones y leyendas del Nilo.
           </p>
         </header>
 
@@ -98,7 +97,7 @@ const App: React.FC = () => {
           <div className="mb-6 flex justify-center">
             <button 
               onClick={handleOpenFormToAdd}
-              className="bg-[#d4af37] hover:bg-[#e6c35c] text-[#2a211c] font-bold py-3 px-6 rounded-lg shadow-md transition duration-200 transform hover:scale-105"
+              className="bg-[#e8b923] hover:bg-[#ffd149] text-[#1a3a4a] font-bold py-3 px-6 rounded-lg shadow-md transition duration-200 transform hover:scale-105"
             >
               Añadir Nuevo Personaje
             </button>
@@ -107,8 +106,8 @@ const App: React.FC = () => {
           <FilterBar
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-            selectedWork={selectedWork}
-            setSelectedWork={setSelectedWork}
+            selectedEra={selectedEra}
+            setSelectedEra={setSelectedEra}
             selectedType={selectedType}
             setSelectedType={setSelectedType}
             alphaFilter={alphaFilter}
@@ -116,7 +115,7 @@ const App: React.FC = () => {
           />
           
           <div className="text-center mb-6">
-            <p className="text-[#6e5a4b] font-semibold">
+            <p className="text-[#3c6e71] font-semibold">
               Mostrando {filteredCharacters.length} de {characterList.length} personajes.
             </p>
           </div>
@@ -133,7 +132,7 @@ const App: React.FC = () => {
               </div>
           ) : (
             <div className="text-center py-16">
-                <p className="text-xl text-[#6e5a4b]">No se encontraron personajes con los filtros actuales.</p>
+                <p className="text-xl text-[#3c6e71]">No se encontraron personajes con los filtros actuales.</p>
             </div>
           )}
 
@@ -157,7 +156,7 @@ const App: React.FC = () => {
       />
       
       <footer className="text-center mt-12 py-4 border-t border-[#d1c7b8]">
-        <p className="text-[#6e5a4b] text-sm">Creado con pasión por la mitología clásica.</p>
+        <p className="text-[#3c6e71] text-sm">Creado con pasión por el Antiguo Egipto.</p>
       </footer>
     </div>
   );

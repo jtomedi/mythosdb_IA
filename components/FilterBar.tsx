@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Work, CharacterType } from '../types';
+import { Era, CharacterType } from '../types';
 
 interface FilterBarProps {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
-  selectedWork: Work | 'all';
-  setSelectedWork: (work: Work | 'all') => void;
+  selectedEra: Era | 'all';
+  setSelectedEra: (era: Era | 'all') => void;
   selectedType: CharacterType | 'all';
   setSelectedType: (type: CharacterType | 'all') => void;
   alphaFilter: string;
@@ -17,8 +17,8 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 export const FilterBar: React.FC<FilterBarProps> = ({
   searchTerm,
   setSearchTerm,
-  selectedWork,
-  setSelectedWork,
+  selectedEra,
+  setSelectedEra,
   selectedType,
   setSelectedType,
   alphaFilter,
@@ -36,59 +36,59 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <div className="p-4 md:p-6 bg-[#3e322b]/70 backdrop-blur-sm rounded-lg shadow-lg mb-8 space-y-6">
+    <div className="p-4 md:p-6 bg-[#f4e8d3]/70 backdrop-blur-sm rounded-lg shadow-lg mb-8 space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
         {/* Search Input */}
         <div>
           <form onSubmit={handleSearchSubmit}>
-            <label htmlFor="search" className="block text-sm font-medium text-[#d4af37] mb-2">
+            <label htmlFor="search" className="block text-sm font-medium text-[#e8b923] mb-2">
               Buscar por Nombre
             </label>
             <input
               id="search"
               type="text"
-              placeholder="Ej: Aquiles..."
+              placeholder="Ej: Anubis..."
               value={localSearchTerm}
               onChange={(e) => setLocalSearchTerm(e.target.value)}
-              className="w-full bg-[#2a211c] border border-[#6e5a4b] rounded-md py-2 px-3 text-[#f5f1e8] focus:ring-2 focus:ring-[#d4af37] focus:border-[#d4af37] transition"
+              className="w-full bg-[#fdf6e3] border border-[#c8b08a] rounded-md py-2 px-3 text-[#1a3a4a] focus:ring-2 focus:ring-[#e8b923] focus:border-[#e8b923] transition"
             />
             <button
               type="submit"
-              className="mt-2 w-full bg-[#d4af37] hover:bg-[#e6c35c] text-[#2a211c] font-bold py-2 px-4 rounded-md transition duration-200"
+              className="mt-2 w-full bg-[#e8b923] hover:bg-[#ffd149] text-[#1a3a4a] font-bold py-2 px-4 rounded-md transition duration-200"
             >
               Buscar
             </button>
           </form>
         </div>
-        {/* Work Filter */}
+        {/* Era Filter */}
         <div>
-          <label htmlFor="work" className="block text-sm font-medium text-[#d4af37] mb-2">
-            Filtrar por Obra
+          <label htmlFor="era" className="block text-sm font-medium text-[#e8b923] mb-2">
+            Filtrar por Era
           </label>
           <select
-            id="work"
-            value={selectedWork}
-            onChange={(e) => setSelectedWork(e.target.value as Work | 'all')}
-            className="w-full bg-[#2a211c] border border-[#6e5a4b] rounded-md py-2 px-3 text-[#f5f1e8] focus:ring-2 focus:ring-[#d4af37] focus:border-[#d4af37] transition"
+            id="era"
+            value={selectedEra}
+            onChange={(e) => setSelectedEra(e.target.value as Era | 'all')}
+            className="w-full bg-[#fdf6e3] border border-[#c8b08a] rounded-md py-2 px-3 text-[#1a3a4a] focus:ring-2 focus:ring-[#e8b923] focus:border-[#e8b923] transition"
           >
-            <option value="all">Todas las Obras</option>
-            {Object.values(Work).map((work) => (
-              <option key={work} value={work}>
-                {work}
+            <option value="all">Todas las Eras</option>
+            {Object.values(Era).map((era) => (
+              <option key={era} value={era}>
+                {era}
               </option>
             ))}
           </select>
         </div>
         {/* Type Filter */}
         <div>
-          <label htmlFor="type" className="block text-sm font-medium text-[#d4af37] mb-2">
+          <label htmlFor="type" className="block text-sm font-medium text-[#e8b923] mb-2">
             Filtrar por Tipo
           </label>
           <select
             id="type"
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value as CharacterType | 'all')}
-            className="w-full bg-[#2a211c] border border-[#6e5a4b] rounded-md py-2 px-3 text-[#f5f1e8] focus:ring-2 focus:ring-[#d4af37] focus:border-[#d4af37] transition"
+            className="w-full bg-[#fdf6e3] border border-[#c8b08a] rounded-md py-2 px-3 text-[#1a3a4a] focus:ring-2 focus:ring-[#e8b923] focus:border-[#e8b923] transition"
           >
             <option value="all">Todos los Tipos</option>
             {Object.values(CharacterType).map((type) => (
@@ -102,7 +102,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
       {/* Alphabetical Filter */}
       <div>
-        <label className="block text-sm font-medium text-[#d4af37] mb-2">
+        <label className="block text-sm font-medium text-[#e8b923] mb-2">
           Filtro Alfabético
         </label>
         <div className="flex flex-wrap gap-1 justify-center">
@@ -110,8 +110,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             onClick={() => setAlphaFilter('all')}
             className={`h-8 w-8 flex items-center justify-center rounded-full text-xs font-bold transition ${
               alphaFilter === 'all'
-                ? 'bg-[#d4af37] text-[#2a211c]'
-                : 'bg-[#4b3f35] text-[#f5f1e8] hover:bg-[#6e5a4b]'
+                ? 'bg-[#e8b923] text-[#1a3a4a]'
+                : 'bg-[#d1c7b8] text-[#1a3a4a] hover:bg-[#c8b08a]'
             }`}
           >
             Todo
@@ -122,8 +122,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               onClick={() => setAlphaFilter(letter)}
               className={`h-8 w-8 flex items-center justify-center rounded-full text-xs font-bold transition ${
                 alphaFilter === letter
-                  ? 'bg-[#d4af37] text-[#2a211c]'
-                  : 'bg-[#4b3f35] text-[#f5f1e8] hover:bg-[#6e5a4b]'
+                  ? 'bg-[#e8b923] text-[#1a3a4a]'
+                  : 'bg-[#d1c7b8] text-[#1a3a4a] hover:bg-[#c8b08a]'
               }`}
             >
               {letter}
